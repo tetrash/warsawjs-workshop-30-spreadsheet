@@ -13,6 +13,9 @@ export default class Toby {
 		this.lastRenderedRow = -1;
 
 		this._sentinel = _createSentinelElement();
+		this._sentinelPosition = 0;
+
+		this._renderedRowElements = [];
 	}
 
 	attachTo( container ) {
@@ -36,27 +39,35 @@ export default class Toby {
 	}
 
 	_render( rowsToRender ) {
-		// console.profile();
-
 		const firstRenderedRow = this.firstRenderedRow;
 		const lastRenderedRow = this.lastRenderedRow;
 		const firstToRender = Math.max( 0, rowsToRender.first - PRELOAD_ROWS );
 		const lastToRender = Math.max( 0, rowsToRender.last + PRELOAD_ROWS );
 
-		const missingRows = _getMissingRows( firstRenderedRow, lastRenderedRow, firstToRender, lastToRender );
+		const start = Math.min( firstRenderedRow, firstToRender );
+		const end = Math.max( lastRenderedRow, lastToRender );
 
-		missingRows.forEach( missingRow => {
-			const rowElement = this._renderRow( missingRow );
+		for ( let row = start; row <= end; row++ ) {
+			if ( row >= firstToRender && row <= lastToRender ) {
+				if ( !this._renderedRowElements[ row ] ) {
+					const rowElement = this._renderRow( row );
 
-			this.container.appendChild( rowElement );
-		} );
+					this.container.appendChild( rowElement );
 
-		this.firstRenderedRow = Math.min( firstToRender, firstRenderedRow );
-		this.lastRenderedRow = Math.max( lastToRender, lastRenderedRow );
+					this._renderedRowElements[ row ] = rowElement;
+				}
+			} else {
+				if ( this._renderedRowElements[ row ] ) {
+					this._renderedRowElements[ row ].remove();
+					this._renderedRowElements[ row ] = null;
+				}
+			}
+		}
+
+		this.firstRenderedRow = firstToRender;
+		this.lastRenderedRow = lastToRender;
 
 		this._updateSentinel( lastToRender );
-
-		// console.profileEnd();
 	}
 
 	_renderRow( row ) {
@@ -74,13 +85,17 @@ export default class Toby {
 	}
 
 	_updateSentinel( lastRow ) {
-		const stretchToRow = lastRow + 3;
+		const stretchToRow = lastRow + 5;
 
-		// Theoretically, setting transform should work finr, but
-		// it didn't work in some (random) cases. Seems to be a Blink's bug.
-		// this._sentinel.style.transform = `translateY(${ stretchToRow * ( ROW_HEIGHT + BORDER_WIDTH ) }px)`;
+		if ( stretchToRow > this._sentinelPosition ) {
+			// Theoretically, setting transform should work fine, but
+			// it didn't work in some (random) cases. Seems to be a Blink's bug.
+			// this._sentinel.style.transform = `translateY(${ stretchToRow * ( ROW_HEIGHT + BORDER_WIDTH ) }px)`;
 
-		this._sentinel.style.top = `${ stretchToRow * ( ROW_HEIGHT + BORDER_WIDTH ) }px`;
+			this._sentinel.style.top = `${ stretchToRow * ( ROW_HEIGHT + BORDER_WIDTH ) }px`;
+
+			this._sentinelPosition = stretchToRow;
+		}
 	}
 }
 
@@ -120,20 +135,6 @@ function _createSentinelElement() {
 	} );
 
 	return sentinelElement;
-}
-
-function _getMissingRows( firstRenderedRow, lastRenderedRow, firstToRender, lastToRender ) {
-	const missingRows = [];
-
-	for ( let row = firstToRender; row <= lastToRender; row++ ) {
-		if ( row < firstRenderedRow ) {
-			missingRows.push( row );
-		} else if ( row > lastRenderedRow ) {
-			missingRows.push( row );
-		}
-	}
-
-	return missingRows;
 }
 
 /**
