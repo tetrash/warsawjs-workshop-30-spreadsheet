@@ -1,0 +1,41 @@
+{
+  "name": "warsawjs-workshop-30-spreadsheet-app",
+  "version": "1.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Reinmar/warsawjs-workshop-30-spreadsheet-app.git"
+  },
+  "author": "Piotrek Koszuliński",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Reinmar/warsawjs-workshop-30-spreadsheet-app/issues"
+  },
+  "homepage": "https://github.com/Reinmar/warsawjs-workshop-30-spreadsheet-app#readme",
+  "scripts": {
+    "build": "webpack --mode development",
+    "lint": "eslint --quiet '**/*.js'"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --quiet"
+    ]
+  },
+  "eslintIgnore": [
+    "build/**"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "csvtojson": "^2.0.8",
+    "eslint": "^5.15.1",
+    "eslint-config-ckeditor5": "^1.0.11",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
+  }
+}

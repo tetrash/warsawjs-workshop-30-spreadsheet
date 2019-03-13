@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Sample spreadsheet app – WarsawJS Workshop #30 – JavaScript runtime preformance</title>
+	<style>
+
+body {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+
+	overflow: scroll;
+
+	background: #000;
+
+	contain: layout;
+}
+
+.row {
+	position: absolute;
+	width: 100%;
+
+	/* Totally deoptimises it... */
+	/* will-change: transform; */
+
+	/* Not sure why it breaks the scrolling */
+	/* contain: layout; */
+}
+
+.cell {
+	position: absolute;
+	box-sizing: border-box;
+	padding: 5px;
+
+	overflow: hidden;
+	vertical-align: baseline;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+
+	background: white;
+
+	/* Totally deoptimises it... */
+	/* will-change: transform; */
+	/* contain: layout; */
+}
+
+.row[data-row="0"] .cell {
+	background: #CCC;
+}
+
+	</style>
+</head>
+<body>
+	<div id="toby" class="container"></div>
+	<script src="dist/index.js"></script>
+</body>
+</html>
