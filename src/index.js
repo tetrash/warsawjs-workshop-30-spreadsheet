@@ -4,14 +4,14 @@ import Toby from './toby';
 import { createDataProvider, AVAILABLE_COLUMNS } from './data-provider';
 
 // ----------------------------------------------------------------------------
-// Create data provider.
+// Create a data provider.
 
 const DISPLAY_COLUMNS1 = AVAILABLE_COLUMNS; // eslint-disable-line no-unused-vars
 
 const DISPLAY_COLUMNS2 = AVAILABLE_COLUMNS.slice( 0, 10 ); // eslint-disable-line no-unused-vars
 DISPLAY_COLUMNS2.push( 'formula_1', 'formula_2', 'formula_3' );
 
-const dataProvider = createDataProvider( DISPLAY_COLUMNS2 );
+const dataProvider = createDataProvider( DISPLAY_COLUMNS1 );
 
 // ----------------------------------------------------------------------------
 // Initialize Toby.
