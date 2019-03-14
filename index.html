@@ -82,6 +82,11 @@ body {
 	background: #68F;
 }
 
+/* Hide excessive columns to not affect painting too much. See DISPLAY_COLUMNS2. */
+.cell:nth-child(n+38) {
+	display: none;
+}
+
 .row[data-row="0"] .cell {
 	background: #CCC;
 }

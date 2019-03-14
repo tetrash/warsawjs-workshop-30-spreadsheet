@@ -77,15 +77,14 @@ export default class Toby {
 		for ( let col = 0; col < this.dataSource.numberOfColumns; col++ ) {
 			const value = this.dataSource.getItem( row, col );
 
-			// Ideas: innerHTML, innerText, textContent, createTextNode, recycle text nodes?
-			rowElement.childNodes[ col ].textContent = value;
+			rowElement.childNodes[ col ].innerHTML = value;
 		}
 
 		return rowElement;
 	}
 
 	_updateSentinel( lastRow ) {
-		const stretchToRow = lastRow + 10;
+		const stretchToRow = lastRow + 5;
 
 		if ( stretchToRow > this._sentinelPosition ) {
 			// Theoretically, setting transform should work fine, but

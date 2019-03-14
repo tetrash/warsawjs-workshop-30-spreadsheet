@@ -6,16 +6,32 @@ import { createDataProvider, AVAILABLE_COLUMNS } from './data-provider';
 // ----------------------------------------------------------------------------
 // Create a data provider.
 
+// Standard set of 38 columns.
 const DISPLAY_COLUMNS1 = AVAILABLE_COLUMNS; // eslint-disable-line no-unused-vars
 
-const DISPLAY_COLUMNS2 = AVAILABLE_COLUMNS.concat( AVAILABLE_COLUMNS ); // eslint-disable-line no-unused-vars
+// Huge number of columns. However, columns over 38+ are hidden via CSS (to underline the DOM creation footprint).
+const DISPLAY_COLUMNS2 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS )
+	.concat( AVAILABLE_COLUMNS );
 
-const DISPLAY_COLUMNS3 = AVAILABLE_COLUMNS.slice( 0, 10 ); // eslint-disable-line no-unused-vars
-DISPLAY_COLUMNS3.push( 'formula_1', 'formula_2', 'formula_3' );
-
+// Small set of columns, however, with 3 formulas which need to be calculated.
 const COMPLEXITY_FACTOR = 99;
+const DISPLAY_COLUMNS3 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
+	.slice( 0, 10 )
+	.concat( [ 'formula_1', 'formula_2', 'formula_3' ] );
 
-const dataProvider = createDataProvider( DISPLAY_COLUMNS3, COMPLEXITY_FACTOR );
+const dataProvider = createDataProvider( DISPLAY_COLUMNS2, COMPLEXITY_FACTOR );
 
 window.dataProvider = dataProvider;
 
