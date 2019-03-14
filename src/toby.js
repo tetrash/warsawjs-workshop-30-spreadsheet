@@ -101,20 +101,28 @@ export default class Toby {
 
 		for ( let row = start; row <= end; row++ ) {
 			if ( row >= firstToRender && row <= lastToRender ) {
+				let rowElement;
+
 				// If the current row should be rendered (in the DOM) but isn't present in the
 				// table of rendered rows (wasn't rendered so far), render it.
 				if ( !this._renderedRowElements[ row ] ) {
-					const rowElement = this._renderRow( row );
-
-					this.container.appendChild( rowElement );
+					rowElement = this._renderRow( row );
 
 					this._renderedRowElements[ row ] = rowElement;
+				}
+				// If the current row was already rendered, use it.
+				else {
+					rowElement = this._renderedRowElements[ row ];
+				}
+
+				// If the current row wasn't in the DOM so far, add it.
+				if ( !rowElement.parentNode ) {
+					this.container.appendChild( rowElement );
 				}
 			} else {
 				// If the current row should not be rendered but is currently rendered, remove it from the DOM.
 				if ( this._renderedRowElements[ row ] ) {
 					this._renderedRowElements[ row ].remove();
-					this._renderedRowElements[ row ] = null;
 				}
 			}
 		}
@@ -178,11 +186,21 @@ export default class Toby {
 		cellElement.style.height = ROW_HEIGHT + 'px';
 		cellElement.style.width = COLUMN_WIDTH + 'px';
 
+		// Display cell status when it's hovered.
 		cellElement.addEventListener( 'mouseenter', () => {
 			this._setCellStatusTo( cellElement.parentNode.dataset.row, col );
 		} );
 		cellElement.addEventListener( 'mouseleave', () => {
 			this._setCellStatusTo( null );
+		} );
+
+		// Select the clicked cell and unselect it when clicking somewhere else.
+		document.body.addEventListener( 'click', evt => {
+			if ( evt.target === cellElement ) {
+				cellElement.classList.add( 'selected' );
+			} else {
+				cellElement.classList.remove( 'selected' );
+			}
 		} );
 
 		return cellElement;
@@ -240,6 +258,9 @@ function observeScrollableViewport( container, callback ) {
 	window.addEventListener( 'resize', onChange );
 
 	function onChange() {
+		// Cache, cause cache makes everything fast!
+		this.cache = callback;
+
 		callback( getViewport( container ) );
 	}
 }
