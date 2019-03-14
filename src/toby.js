@@ -88,7 +88,7 @@ export default class Toby {
 
 		if ( stretchToRow > this._sentinelPosition ) {
 			// Theoretically, setting transform should work fine, but
-			// it didn't work in some (random) cases. Seems to be a Blink's bug.
+			// it didn't work in some (random) cases. Seemed to be a Blink's bug.
 			// this._sentinel.style.transform = `translateY(${ stretchToRow * ( ROW_HEIGHT + BORDER_WIDTH ) }px)`;
 
 			this._sentinel.style.top = `${ stretchToRow * ( ROW_HEIGHT + BORDER_WIDTH ) }px`;
@@ -144,11 +144,12 @@ export default class Toby {
 
 	_setCellStatusTo( row, col ) {
 		if ( row === null ) {
-			this.cellStatusElement.textContent = '';
+			this.cellStatusElement.innerHTML = '';
+
 			return;
 		}
 
-		this.cellStatusElement.textContent = `row: ${ row }, col: ${ col }, data: ${ this.dataSource.getItem( row, col ) }`;
+		this.cellStatusElement.innerHTML = `row: ${ row }, col: ${ col }, data: ${ this.dataSource.getItem( row, col ) }`;
 	}
 }
 

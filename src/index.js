@@ -6,15 +6,13 @@ import { createDataProvider, AVAILABLE_COLUMNS } from './data-provider';
 // ----------------------------------------------------------------------------
 // Create a data provider.
 
-// Standard set of 38 columns.
-const DISPLAY_COLUMNS1 = AVAILABLE_COLUMNS; // eslint-disable-line no-unused-vars
+// The standard set of 38 columns.
+const DISPLAY_COLUMNS_1 = AVAILABLE_COLUMNS; // eslint-disable-line no-unused-vars
 
-// Huge number of columns. However, columns over 38+ are hidden via CSS (to underline the DOM creation footprint).
-const DISPLAY_COLUMNS2 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
-	.concat( AVAILABLE_COLUMNS )
-	.concat( AVAILABLE_COLUMNS )
-	.concat( AVAILABLE_COLUMNS )
-	.concat( AVAILABLE_COLUMNS )
+// A huge number of columns (10*38).
+// However, columns over 38+ are hidden via CSS
+// (to underline the DOM creation footprint, not painting).
+const DISPLAY_COLUMNS_2 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
 	.concat( AVAILABLE_COLUMNS )
 	.concat( AVAILABLE_COLUMNS )
 	.concat( AVAILABLE_COLUMNS )
@@ -25,13 +23,18 @@ const DISPLAY_COLUMNS2 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
 	.concat( AVAILABLE_COLUMNS )
 	.concat( AVAILABLE_COLUMNS );
 
-// Small set of columns, however, with 3 formulas which need to be calculated.
+// A small set of 13 columns.
+// However, with 3 complex formulas which need to be calculated.
 const COMPLEXITY_FACTOR = 99;
-const DISPLAY_COLUMNS3 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
+const DISPLAY_COLUMNS_3 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-vars
 	.slice( 0, 10 )
 	.concat( [ 'formula_1', 'formula_2', 'formula_3' ] );
 
-const dataProvider = createDataProvider( DISPLAY_COLUMNS2, COMPLEXITY_FACTOR );
+// Use the column set defined in the URL by the hash (#0 - #2).
+const COLUMN_SETS = [ DISPLAY_COLUMNS_1, DISPLAY_COLUMNS_2, DISPLAY_COLUMNS_3 ];
+const chosenColumnSet = Number( window.location.hash.slice( 1 ) );
+
+const dataProvider = createDataProvider( COLUMN_SETS[ chosenColumnSet ], COMPLEXITY_FACTOR );
 
 window.dataProvider = dataProvider;
 
@@ -57,7 +60,7 @@ export function initToby() {
 
 export function destroyToby() {
 	if ( !window.toby ) {
-		console.error( 'Cannot destroy Toby. Toby isn\'t yet initialized.' );
+		console.error( 'Cannot destroy Toby. Toby wasn\'t yet initialized.' );
 
 		return;
 	}
