@@ -3,7 +3,7 @@
 const ROW_HEIGHT = 30;
 const COLUMN_WIDTH = 120;
 const BORDER_WIDTH = 1;
-const PRELOAD_ROWS = 2;
+const PRELOAD_ROWS = 5;
 
 export default class Toby {
 	constructor( dataSource ) {
@@ -12,33 +12,34 @@ export default class Toby {
 		this.firstRenderedRow = Number.MAX_SAFE_INTEGER;
 		this.lastRenderedRow = -1;
 
-		this._sentinel = _createSentinelElement();
+		this._sentinel = this._createSentinelElement();
 		this._sentinelPosition = 0;
 
 		this._renderedRowElements = [];
 	}
 
-	attachTo( container ) {
+	attachTo( { container, statusBar } ) {
 		this.container = container;
+		this.cellStatusElement = statusBar.querySelector( '.status-bar__current-cell' );
+
+		this.render();
 
 		container.appendChild( this._sentinel );
 
-		const visibleRows = getVisibleRowRange( getViewport( container ) );
-
-		this._render( visibleRows );
-
-		observeScrollableViewport( container, () => {
-			const visibleRows = getVisibleRowRange( getViewport( container ) );
-
-			this._render( visibleRows );
-		} );
+		observeScrollableViewport( container, () => this.render() );
 	}
 
 	destroy() {
 		this.container.innerHTML = '';
 	}
 
-	_render( rowsToRender ) {
+	render() {
+		const visibleRows = getVisibleRowRange( getViewport( this.container ) );
+
+		this._update( visibleRows );
+	}
+
+	_update( rowsToRender ) {
 		const firstRenderedRow = this.firstRenderedRow;
 		const lastRenderedRow = this.lastRenderedRow;
 		const firstToRender = Math.max( 0, rowsToRender.first - PRELOAD_ROWS );
@@ -71,10 +72,9 @@ export default class Toby {
 	}
 
 	_renderRow( row ) {
-		const numberOfColumns = this.dataSource.numberOfColumns;
-		const rowElement = _createRowElement( row, numberOfColumns );
+		const rowElement = this._createRowElement( row );
 
-		for ( let col = 0; col < numberOfColumns; col++ ) {
+		for ( let col = 0; col < this.dataSource.numberOfColumns; col++ ) {
 			const value = this.dataSource.getItem( row, col );
 
 			// Ideas: innerHTML, innerText, textContent, createTextNode, recycle text nodes?
@@ -85,7 +85,7 @@ export default class Toby {
 	}
 
 	_updateSentinel( lastRow ) {
-		const stretchToRow = lastRow + 5;
+		const stretchToRow = lastRow + 10;
 
 		if ( stretchToRow > this._sentinelPosition ) {
 			// Theoretically, setting transform should work fine, but
@@ -97,44 +97,60 @@ export default class Toby {
 			this._sentinelPosition = stretchToRow;
 		}
 	}
-}
 
-function _createRowElement( row, numberOfColumns ) {
-	const rowElement = document.createElement( 'div' );
+	_createRowElement( row ) {
+		const rowElement = document.createElement( 'div' );
 
-	rowElement.classList.add( 'row' );
-	rowElement.dataset.row = row;
-	rowElement.style.transform = `translateY(${ row * ( ROW_HEIGHT + BORDER_WIDTH ) }px)`;
+		rowElement.classList.add( 'row' );
+		rowElement.dataset.row = row;
+		rowElement.style.transform = `translateY(${ row * ( ROW_HEIGHT + BORDER_WIDTH ) }px)`;
 
-	for ( let col = 0; col < numberOfColumns; col++ ) {
-		rowElement.appendChild( _createCellElement( col ) );
+		for ( let col = 0; col < this.dataSource.numberOfColumns; col++ ) {
+			rowElement.appendChild( this._createCellElement( col ) );
+		}
+
+		return rowElement;
 	}
 
-	return rowElement;
-}
+	_createCellElement( col ) {
+		const cellElement = document.createElement( 'div' );
 
-function _createCellElement( col ) {
-	const cellElement = document.createElement( 'div' );
+		cellElement.classList.add( 'cell' );
+		cellElement.dataset.col = col;
+		cellElement.style.transform = `translateX(${ col * ( COLUMN_WIDTH + BORDER_WIDTH ) }px)`;
+		cellElement.style.height = ROW_HEIGHT + 'px';
+		cellElement.style.width = COLUMN_WIDTH + 'px';
 
-	cellElement.classList.add( 'cell' );
-	cellElement.dataset.col = col;
-	cellElement.style.transform = `translateX(${ col * ( COLUMN_WIDTH + BORDER_WIDTH ) }px)`;
-	cellElement.style.height = ROW_HEIGHT + 'px';
-	cellElement.style.width = COLUMN_WIDTH + 'px';
+		cellElement.addEventListener( 'mouseenter', () => {
+			this._setCellStatusTo( cellElement.parentNode.dataset.row, col );
+		} );
+		cellElement.addEventListener( 'mouseleave', () => {
+			this._setCellStatusTo( null );
+		} );
 
-	return cellElement;
-}
+		return cellElement;
+	}
 
-function _createSentinelElement() {
-	const sentinelElement = document.createElement( 'div' );
+	_createSentinelElement() {
+		const sentinelElement = document.createElement( 'div' );
 
-	Object.assign( sentinelElement.style, {
-		position: 'absolute',
-		height: '1px',
-		width: '1px'
-	} );
+		Object.assign( sentinelElement.style, {
+			position: 'absolute',
+			height: '1px',
+			width: '1px'
+		} );
 
-	return sentinelElement;
+		return sentinelElement;
+	}
+
+	_setCellStatusTo( row, col ) {
+		if ( row === null ) {
+			this.cellStatusElement.textContent = '';
+			return;
+		}
+
+		this.cellStatusElement.textContent = `row: ${ row }, col: ${ col }, data: ${ this.dataSource.getItem( row, col ) }`;
+	}
 }
 
 /**

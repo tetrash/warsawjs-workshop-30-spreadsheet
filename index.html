@@ -11,10 +11,35 @@ body {
 	overflow: hidden;
 }
 
+.status-bar {
+	position: relative;
+	box-sizing: border-box;
+	height: 50px;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	background: #DB3;
+	border-bottom: solid 2px #A82;
+	z-index: 1;
+}
+
+.status-bar h1 {
+	margin: 0 0 0 20px;
+	font-size: 30px;
+}
+
+.status-bar__current-cell {
+	width: 20%;
+	text-align: right;
+	margin-right: 20px;
+}
+
 .container {
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: calc( 100% - 50px );
 	padding: 0;
 	margin: 0;
 
@@ -53,6 +78,10 @@ body {
 	/* contain: layout; */
 }
 
+.cell.selected {
+	background: #68F;
+}
+
 .row[data-row="0"] .cell {
 	background: #CCC;
 }
@@ -60,7 +89,15 @@ body {
 	</style>
 </head>
 <body>
-	<div id="toby" class="container"></div>
+	<div class="status-bar">
+		<h1>Toby, the spreadsheet</h1>
+		<div class="status-bar__actions">
+			<button onclick="initToby()">Init</button>
+			<button onclick="destroyToby()">Destroy</button>
+		</div>
+		<div class="status-bar__current-cell"></div>
+	</div>
+	<div class="container"></div>
 	<script src="dist/index.js"></script>
 </body>
 </html>
