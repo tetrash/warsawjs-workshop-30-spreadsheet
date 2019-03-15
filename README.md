@@ -18,7 +18,7 @@ It also contains a set of simple code snippets on which we'll be able to learn h
 
 ## Setup
 
-1. Fork this project on GitHub
+1. Fork this project on GitHub.
 2. Clone your fork:
 
 	```bash
@@ -68,7 +68,7 @@ It also contains a set of simple code snippets on which we'll be able to learn h
 
 In order to avoid the profiler picking noise from Chrome's extensions (e.g. Adblock), you need to run it without any addons, plugins and in the incognito mode. Additionally, we want to enable `--enable-precise-memory-info`.
 
-**Note:** You need to close Chrome first. Running the commands below will close your current tabs too, so make sure to bookmark them or store in any other way if you are particularly attached to them.
+**Note:** You need to **close Chrome first**. Running the commands below will make Chrome **close your current tabs** too, so make sure to bookmark them or store in any other way if you are particularly attached to them.
 
 To do that on Linux:
 
@@ -84,6 +84,17 @@ Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-precise-m
 
 To do that on Windows refer to [this article](https://www.ghacks.net/2013/10/06/list-useful-google-chrome-command-line-switches/).
 
+## Plan
+
+1. First, we'll track and fix memory leaks.
+2. Then, we'll work on improving Toby's performance.
+
+Don't worry, before each section I'll introduce the tools and show the common problems.
+
 ## Misc
 
 If you can't stand my code style, feel free to automatically reformat the code to your beloved standard.
+
+## Author
+
+Piotrek Koszuliński ([@reinmarpl](https://twitter.com/reinmarpl))
