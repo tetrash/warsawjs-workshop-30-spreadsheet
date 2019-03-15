@@ -21,35 +21,35 @@ It also contains a set of simple code snippets on which we'll be able to learn h
 1. Fork this project on GitHub
 2. Clone your fork:
 
-	```
+	```bash
 	git clone git@github.com:YOUR_GITHUB_USERNAME/warsawjs-workshop-30-spreadsheet.git
 	```
 3. Go to the project directory:
 
-	```
+	```bash
 	cd warsawjs-workshop-30-spreadsheet
 	```
 4. Install Toby's dependencies:
 
-	```
+	```bash
 	yarn
 	```
 
 	or if you have a lot of time:
 
-	```
+	```bash
 	npm i
 	```
 5. Build the project:
 
-	```
+	```bash
 	yarn run dev
 	# or:
 	npm run dev
 	```
 5. If you don't have Apache or other server, run:
 
-	```
+	```bash
 	yarn run serve
 	# or:
 	npm run serve
@@ -61,6 +61,8 @@ It also contains a set of simple code snippets on which we'll be able to learn h
 8. Get familiar with the source code (at least a bit).
 
 	**Disclaimer:** Yes, the code is quite dumb. You'll be fixing it 😉.
+
+	**Disclaimer:** Yes, the code doesn't have tests 😨 I'm very sorry for that.
 
 ### Last but not least
 
