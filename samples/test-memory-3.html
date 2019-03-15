@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Leaking timeouts – JavaScript performance workshops</title>
+</head>
+<body>
+	<h1>Leaking timeouts – JavaScript performance workshops</h1>
+
+	<p><button id="leak-timeout">set timeout</button></p>
+
+	<script>
+
+document.getElementById( 'leak-timeout' ).addEventListener( 'click', () => {
+	let foo = Array.from( Array( 99999 ).keys() );
+
+	setTimeout( function timeoutCallback() {
+		// 1st
+		// console.log( 'timeout!', foo );
+
+		// 2nd
+		// console.log( 'timeout!', foo.length );
+	}, 2000 );
+} );
+
+	</script>
+</body>
+</html>

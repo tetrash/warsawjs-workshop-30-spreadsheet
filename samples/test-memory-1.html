@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Leaking globals – JavaScript performance workshops</title>
+</head>
+<body>
+	<h1>Leaking globals – JavaScript performance workshops</h1>
+
+	<p><button id="leak-globals">Leak globals</button></p>
+	<p><button id="delete-foo">Delete foo</button></p>
+	<p><button id="delete-bar">Delete bar</button></p>
+
+	<script>
+
+document.getElementById( 'leak-globals' ).addEventListener( 'click', function() {
+	foo = Array.from( Array( 99999 ).keys() );
+	bar = Array.apply( null, { length: 99999 } ).map( Function.call, Math.random );
+} );
+
+document.getElementById( 'delete-foo' ).addEventListener( 'click', function() {
+	foo = null;
+} );
+
+document.getElementById( 'delete-bar' ).addEventListener( 'click', function() {
+	bar = null;
+} );
+
+	</script>
+</body>
+</html>

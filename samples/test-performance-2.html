@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Profiling CPU hogging, JIT and deopts – JavaScript performance workshops</title>
+
+	<style>
+		#container {
+			display: flex;
+			align-items: center;
+		}
+
+		span {
+			width: 2px;
+			background: blue;
+		}
+	</style>
+</head>
+<body>
+	<h1>Profiling CPU hogging, JIT and deopts – JavaScript performance workshops</h1>
+
+	<p><button id="start">start!</button></p>
+	<p><button id="stop">stop!</button></p>
+
+	<div id="container"></div>
+
+	<script>
+
+{
+	const NODE_COUNT = 400;
+	const container = document.getElementById( 'container' );
+
+	const nodes = Array( NODE_COUNT ).fill().map( () => {
+		const node = document.createElement( 'span' );
+
+		container.appendChild( node );
+
+		return node;
+	} );
+
+	let animation;
+
+	document.getElementById( 'start' ).addEventListener( 'click', () => {
+		let start;
+
+		animation = requestAnimationFrame( function update( timestamp ) {
+			if ( !start ) {
+				start = timestamp;
+			}
+
+  			const progress = timestamp - start;
+
+			for ( let i = 0; i < NODE_COUNT; i++ ) {
+				// 1st, 3rd
+				const node = document.getElementById( 'container' ).childNodes[ i ];
+
+				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) + 'px';
+
+				// 2nd
+				// nodes[ i ].style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) + 'px';
+
+				// 3rd
+				// now we see it in the perf panel!
+				// or don't we?
+				// node.dataset.rand = computeSomething( progress * i );
+			}
+
+			animation = requestAnimationFrame( update );
+		} );
+	} );
+
+	document.getElementById( 'stop' ).addEventListener( 'click', () => {
+		cancelAnimationFrame( animation );
+	} );
+
+	function computeSomething( seed ) {
+		let res = seed;
+
+		// 4th
+		// iterate to 1000
+		for ( let i = 0; i < 100; i++ ) {
+			res += Math.sin( i * seed );
+
+			// 5th
+			// res += Math.sin( i * seed ) + 'a';
+
+			// 6th
+			// res += Math.sin( i * seed ) + window.location.hash;
+		}
+
+		return res;
+	}
+}
+
+	</script>
+</body>
+</html>
