@@ -63,6 +63,11 @@ It also contains a set of simple code snippets on which we'll be able to learn h
 	**Disclaimer:** Yes, the code is quite dumb. You'll be fixing it 😉.
 
 	**Disclaimer:** Yes, the code doesn't have tests 😨 I'm very sorry for that.
+9. Add this repo as `upstream` (because I'm sure I'll be pushing last-minute fixes 😉):
+
+	```bash
+	git remote add upstream git@github.com:Reinmar/warsawjs-workshop-30-spreadsheet.git
+	```
 
 ### Last but not least
 
@@ -94,6 +99,8 @@ Don't worry, before each section I'll introduce the tools and show the common pr
 ## Misc
 
 If you can't stand my code style, feel free to automatically reformat the code to your beloved standard.
+
+If something doesn't work in the setup or you have any other questions before/after the workshop, feel free to open issues in this repository.
 
 ## Author
 
