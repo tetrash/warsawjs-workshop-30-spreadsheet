@@ -11,6 +11,7 @@
 	<p><button id="remove-node">remove node</button></p>
 
 	<script>
+/* eslint-disable */
 
 {
 	window.storedNodes = [];
@@ -26,14 +27,14 @@
 		document.body.appendChild( node );
 		storedNodes[ added ] = node;
 
-		added++
+		added++;
 	} );
 
 	document.getElementById( 'remove-node' ).addEventListener( 'click', () => {
 		storedNodes[ removed ].remove();
 		// storedNodes[ removed ] = null;
 
-		removed++
+		removed++;
 	} );
 }
 

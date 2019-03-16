@@ -25,6 +25,7 @@
 	<div id="container"></div>
 
 	<script>
+/* globals document, setTimeout, clearTimeout */
 
 {
 	const NODE_COUNT = 400;
@@ -41,10 +42,10 @@
 	let timeout;
 
 	document.getElementById( 'start' ).addEventListener( 'click', () => {
-		let start = new Date().getTime();
+		const start = new Date().getTime();
 
 		timeout = setTimeout( function update() {
-  			const progress = new Date().getTime() - start;
+			const progress = new Date().getTime() - start;
 
 			nodes.forEach( ( node, i ) => {
 				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) + 'px';

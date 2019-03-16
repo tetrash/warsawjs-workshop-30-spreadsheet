@@ -66,6 +66,7 @@
 	<div id="container"></div>
 
 	<script>
+/* globals document, requestAnimationFrame, cancelAnimationFrame */
 
 {
 	const NODE_COUNT = 400;
@@ -95,11 +96,11 @@
 				start = timestamp;
 			}
 
-  			const progress = timestamp - start;
+			const progress = timestamp - start;
 
 			nodes.forEach( ( node, i ) => {
 				// 1st, 2nd, 3rd
-				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) + 'px';
+				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50 ) ) + 'px';
 
 				// 4th
 				// node.style.transform =

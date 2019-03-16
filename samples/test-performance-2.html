@@ -25,6 +25,7 @@
 	<div id="container"></div>
 
 	<script>
+/* globals document, requestAnimationFrame, cancelAnimationFrame */
 
 {
 	const NODE_COUNT = 400;
@@ -48,7 +49,7 @@
 				start = timestamp;
 			}
 
-  			const progress = timestamp - start;
+			const progress = timestamp - start;
 
 			for ( let i = 0; i < NODE_COUNT; i++ ) {
 				// 1st, 3rd
