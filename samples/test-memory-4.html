@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Leaking DOM nodes – JavaScript performance workshops</title>
+</head>
+<body>
+	<h1>Leaking DOM nodes – JavaScript performance workshops</h1>
+
+	<p><button id="add-node">add node</button></p>
+	<p><button id="remove-node">remove node</button></p>
+
+	<script>
+/* eslint-disable */
+
+{
+	window.storedNodes = [];
+
+	let added = 0;
+	let removed = 0;
+
+	document.getElementById( 'add-node' ).addEventListener( 'click', () => {
+		const node = document.createElement( 'custom' );
+
+		node.textContent = added;
+
+		document.body.appendChild( node );
+		storedNodes[ added ] = node;
+
+		added++;
+	} );
+
+	document.getElementById( 'remove-node' ).addEventListener( 'click', () => {
+		storedNodes[ removed ].remove();
+		// storedNodes[ removed ] = null;
+
+		removed++;
+	} );
+}
+
+	</script>
+</body>
+</html>

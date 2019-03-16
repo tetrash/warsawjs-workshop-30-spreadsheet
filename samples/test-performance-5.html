@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Profilin5 layout trashing – JavaScript performance workshops</title>
+
+	<style>
+		span {
+			display: block;
+			height: 2px;
+			background: blue;
+		}
+	</style>
+</head>
+<body>
+	<h1>Profiling layout trashing – JavaScript performance workshops</h1>
+
+	<p><button id="start">start!</button></p>
+	<p><button id="stop">stop!</button></p>
+
+	<div id="container"></div>
+
+	<script>
+/* globals document, requestAnimationFrame, cancelAnimationFrame */
+
+{
+	const NODE_COUNT = 200;
+	const container = document.getElementById( 'container' );
+
+	const nodes = Array( NODE_COUNT ).fill().map( () => {
+		const node = document.createElement( 'span' );
+
+		node.style.width = '100px';
+
+		container.appendChild( node );
+
+		return node;
+	} );
+	const nodeWidths = Array( NODE_COUNT ).fill( 100 );
+
+	let animation;
+
+	document.getElementById( 'start' ).addEventListener( 'click', () => {
+		let start;
+
+		animation = requestAnimationFrame( function update( timestamp ) {
+			if ( !start ) {
+				start = timestamp;
+			}
+
+			const progress = timestamp - start;
+
+			// 1st
+			nodes.forEach( ( node, i ) => {
+				node.style.width = node.clientWidth + 10 * Math.sin(  i / 100 + progress / 100 ) + 'px';
+			} );
+
+			// 2nd
+			// nodes.forEach( ( node, i ) => {
+			// 	const oldWidth = nodeWidths[ i ];
+			// 	const newWidth = oldWidth + 10 * Math.sin(  i / 100 + progress / 100 );
+
+			// 	node.style.width = newWidth + 'px';
+
+			// 	nodeWidths[ i ] = newWidth;
+			// } );
+
+			animation = requestAnimationFrame( update );
+		} );
+	} );
+
+	document.getElementById( 'stop' ).addEventListener( 'click', () => {
+		cancelAnimationFrame( animation );
+	} );
+}
+
+	</script>
+</body>
+</html>

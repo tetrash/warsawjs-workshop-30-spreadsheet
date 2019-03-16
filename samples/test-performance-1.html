@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Profiling rendering – JavaScript performance workshops</title>
+
+	<style>
+		/* 1st */
+
+		#container {
+			display: flex;
+			align-items: center;
+		}
+
+		span {
+			width: 2px;
+			background: blue;
+		}
+
+		/* 2nd */
+
+		/*#container {
+			position: relative;
+		}
+
+		span {
+			width: 2px;
+			background: blue;
+			position: absolute;
+			top: 0;
+		}*/
+
+		/* 3rd */
+
+		/*#container {
+			position: relative;
+		}
+
+		span {
+			width: 2px;
+			background: blue;
+			position: absolute;
+		}*/
+
+		/* 4th */
+
+		/*#container {
+			position: relative;
+		}
+
+		span {
+			width: 2px;
+			height: 1px;
+			background: blue;
+			position: absolute;
+			top: 100px;
+		}*/
+	</style>
+</head>
+<body>
+	<h1>Profiling rendering – JavaScript performance workshops</h1>
+
+	<p><button id="start">start!</button></p>
+	<p><button id="stop">stop!</button></p>
+
+	<div id="container"></div>
+
+	<script>
+/* globals document, requestAnimationFrame, cancelAnimationFrame */
+
+{
+	const NODE_COUNT = 400;
+	const container = document.getElementById( 'container' );
+
+	const nodes = Array( NODE_COUNT ).fill().map( ( v, i ) => {
+		const node = document.createElement( 'span' );
+
+		container.appendChild( node );
+
+		// 2nd
+		// node.style.left = i * 2 + 'px';
+
+		// 3rd
+		// node.style.transform = `translateX(${ i * 2 }px)`;
+
+		return node;
+	} );
+
+	let animation;
+
+	document.getElementById( 'start' ).addEventListener( 'click', () => {
+		let start;
+
+		animation = requestAnimationFrame( function update( timestamp ) {
+			if ( !start ) {
+				start = timestamp;
+			}
+
+			const progress = timestamp - start;
+
+			nodes.forEach( ( node, i ) => {
+				// 1st, 2nd, 3rd
+				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50 ) ) + 'px';
+
+				// 4th
+				// node.style.transform =
+				// 	`translateX(${ i * 2 }px) scaleY(${ 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) })`;
+			} );
+
+			animation = requestAnimationFrame( update );
+		} );
+	} );
+
+	document.getElementById( 'stop' ).addEventListener( 'click', () => {
+		cancelAnimationFrame( animation );
+	} );
+}
+
+	</script>
+</body>
+</html>

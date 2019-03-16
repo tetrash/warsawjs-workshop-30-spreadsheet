@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Profiling setTimeout vs requestAnimationFrame – JavaScript performance workshops</title>
+
+	<style>
+		#container {
+			display: flex;
+			align-items: center;
+		}
+
+		span {
+			width: 2px;
+			background: blue;
+		}
+	</style>
+</head>
+<body>
+	<h1>Profiling setTimeout vs requestAnimationFrame – JavaScript performance workshops</h1>
+
+	<p><button id="start">start!</button></p>
+	<p><button id="stop">stop!</button></p>
+
+	<div id="container"></div>
+
+	<script>
+/* globals document, setTimeout, clearTimeout */
+
+{
+	const NODE_COUNT = 400;
+	const container = document.getElementById( 'container' );
+
+	const nodes = Array( NODE_COUNT ).fill().map( () => {
+		const node = document.createElement( 'span' );
+
+		container.appendChild( node );
+
+		return node;
+	} );
+
+	let timeout;
+
+	document.getElementById( 'start' ).addEventListener( 'click', () => {
+		const start = new Date().getTime();
+
+		timeout = setTimeout( function update() {
+			const progress = new Date().getTime() - start;
+
+			nodes.forEach( ( node, i ) => {
+				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) + 'px';
+			} );
+
+			timeout = setTimeout( update );
+		}, 1000 / 60 );
+	} );
+
+	document.getElementById( 'stop' ).addEventListener( 'click', () => {
+		clearTimeout( timeout );
+	} );
+}
+
+	</script>
+</body>
+</html>

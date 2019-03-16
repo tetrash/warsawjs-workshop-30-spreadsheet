@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Profiling GC pauses – JavaScript performance workshops</title>
+
+	<style>
+		#container {
+			display: flex;
+			align-items: center;
+		}
+
+		span {
+			width: 2px;
+			background: blue;
+		}
+	</style>
+</head>
+<body>
+	<h1>Profiling GS pauses – JavaScript performance workshops</h1>
+
+	<p><button id="start">start!</button></p>
+	<p><button id="stop">stop!</button></p>
+
+	<div id="container"></div>
+
+	<script>
+/* globals document, requestAnimationFrame, cancelAnimationFrame, console */
+
+{
+	const NODE_COUNT = 400;
+	const container = document.getElementById( 'container' );
+
+	const nodes = Array( NODE_COUNT ).fill().map( () => {
+		const node = document.createElement( 'span' );
+
+		container.appendChild( node );
+
+		return node;
+	} );
+
+	let animation;
+
+	let flood;
+
+	document.getElementById( 'start' ).addEventListener( 'click', () => {
+		let start;
+
+		animation = requestAnimationFrame( function update( timestamp ) {
+			if ( !start ) {
+				start = timestamp;
+			}
+
+			const progress = timestamp - start;
+
+			nodes.forEach( ( node, i ) => {
+				node.style.height = 100 * ( 1 + Math.sin( progress / 100 + i / 50  ) ) + 'px';
+			} );
+
+			animation = requestAnimationFrame( update );
+
+			if ( flood ) {
+				flood = null;
+			} else {
+				// 1st
+				flood = Array( 100 ).fill().map( () => {
+					const node = document.createElement( 'span' );
+
+					node.addEventListener( 'click', () => { console.log( progress ) } );
+
+					return node;
+				} );
+
+				// 2nd
+				// 999 => 99999 (see how major GCs appear)
+				// flood = getRandoms( 99999 );
+			}
+
+			// 3rd
+			// flood = Array( 100 ).fill().map( () => {
+			// 	const node = document.createElement( 'span' );
+
+			// 	document.body.appendChild( node );
+
+			// 	node.addEventListener( 'click', () => { console.log( progress ) } );
+
+			// 	return node;
+			// } );
+		} );
+	} );
+
+	document.getElementById( 'stop' ).addEventListener( 'click', () => {
+		cancelAnimationFrame( animation );
+	} );
+
+	function getRandoms( length ) {
+		// return Array( length ).fill().map( () => Math.random() );
+
+		// 4th
+		// const arr = Array( length );
+
+		// for ( let i = 0; i < length; i++ ) {
+		// 	arr[ i ] = Math.random();
+		// }
+
+		// return arr;
+
+		// 5th
+		// const arr = Array();
+
+		// for ( let i = 0; i < length; i++ ) {
+		// 	arr.push( Math.random() );
+		// }
+
+		// return arr;
+	}
+}
+
+	</script>
+</body>
+</html>
