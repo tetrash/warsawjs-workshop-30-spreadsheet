@@ -84,7 +84,7 @@ google-chrome --enable-precise-memory-info --disable-extensions --disable-plugin
 To do that on macOS:
 
 ```
-Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-precise-memory-info --disable-extensions --disable-plugins --incognito
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-precise-memory-info --disable-extensions --disable-plugins --incognito
 ```
 
 To do that on Windows refer to [this article](https://www.ghacks.net/2013/10/06/list-useful-google-chrome-command-line-switches/).
