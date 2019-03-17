@@ -60,7 +60,7 @@ export default class Toby {
 
 		container.appendChild( this._sentinel );
 
-		observeScrollableViewport( container, () => this.render() );
+		this.onChange = observeScrollableViewport( container, () => this.render() );
 	}
 
 	/**
@@ -68,6 +68,9 @@ export default class Toby {
 	 */
 	destroy() {
 		this.container.innerHTML = '';
+
+		this.container.removeEventListener( 'scroll', this.onChange );
+		window.removeEventListener( 'resize', this.onChange );
 	}
 
 	/**
@@ -256,6 +259,8 @@ export default class Toby {
 function observeScrollableViewport( container, callback ) {
 	container.addEventListener( 'scroll', onChange );
 	window.addEventListener( 'resize', onChange );
+
+	return onChange;
 
 	function onChange() {
 		// Cache, cause cache makes everything fast!
