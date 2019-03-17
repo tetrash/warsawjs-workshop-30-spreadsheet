@@ -34,9 +34,7 @@ const DISPLAY_COLUMNS_3 = AVAILABLE_COLUMNS // eslint-disable-line no-unused-var
 const COLUMN_SETS = [ DISPLAY_COLUMNS_1, DISPLAY_COLUMNS_2, DISPLAY_COLUMNS_3 ];
 const chosenColumnSet = Number( window.location.hash.slice( 1 ) );
 
-const dataProvider = createDataProvider( COLUMN_SETS[ chosenColumnSet ], COMPLEXITY_FACTOR );
-
-window.dataProvider = dataProvider;
+// window.dataProvider = dataProvider;
 
 // ----------------------------------------------------------------------------
 // Initialize Toby.
@@ -47,6 +45,7 @@ export function initToby() {
 
 		return;
 	}
+	const dataProvider = createDataProvider( COLUMN_SETS[ chosenColumnSet ], COMPLEXITY_FACTOR );
 
 	const toby = new Toby( dataProvider );
 
